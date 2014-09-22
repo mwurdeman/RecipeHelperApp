@@ -1,0 +1,36 @@
+USE [RecipeHelper]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE TABLE [dbo].[RecipeStyle](
+	[RecipeID] [int] NOT NULL,
+	[StyleID] [int] NOT NULL,
+ CONSTRAINT [PK_RecipeStyle] PRIMARY KEY CLUSTERED 
+(
+	[RecipeID] ASC,
+	[StyleID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[RecipeStyle]  WITH CHECK ADD  CONSTRAINT [FK_RecipeStyle_Recipe] FOREIGN KEY([RecipeID])
+REFERENCES [dbo].[Recipe] ([RecipeID])
+GO
+
+ALTER TABLE [dbo].[RecipeStyle] CHECK CONSTRAINT [FK_RecipeStyle_Recipe]
+GO
+
+ALTER TABLE [dbo].[RecipeStyle]  WITH CHECK ADD  CONSTRAINT [FK_RecipeStyle_Style] FOREIGN KEY([StyleID])
+REFERENCES [dbo].[Style] ([StyleID])
+GO
+
+ALTER TABLE [dbo].[RecipeStyle] CHECK CONSTRAINT [FK_RecipeStyle_Style]
+GO
+
+
