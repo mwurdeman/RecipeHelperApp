@@ -8,7 +8,7 @@ namespace RecipeHelper.Domain
 {
     public class Recipe
     {
-        public int RecipeID { get; set; }
+        public int ID { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Source { get; set; }
