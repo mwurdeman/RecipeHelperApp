@@ -248,6 +248,92 @@ GO
 ALTER TABLE [dbo].[RecipeStyle] CHECK CONSTRAINT [FK_RecipeStyle_Style]
 GO
 
+--INSERT INTO TABLES
+INSERT INTO Dish
+(Name)
+VALUES
+('Breakfast');
+
+INSERT INTO Dish
+(Name)
+VALUES
+('Lunch');
+
+INSERT INTO Dish
+(Name)
+VALUES
+('Dinner');
+
+INSERT INTO Dish
+(Name)
+VALUES
+('Snack');
+
+INSERT INTO Dish
+(Name)
+VALUES
+('Dessert');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Chicken');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Pork');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Steak');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Beef');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Pasta');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Soup');
+
+INSERT INTO Category
+(Name)
+VALUES
+('Fish');
+
+INSERT INTO Style
+(Name)
+VALUES
+('BBQ');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Chinese');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Italian');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Mexican');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Stew');
+
 --SELECT FROM TABLES
 SELECT * FROM dbo.Recipe
 SELECT * FROM dbo.Ingredient
