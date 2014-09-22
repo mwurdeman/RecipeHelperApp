@@ -199,12 +199,18 @@
 <part>RecipeStepID</part>
 </key>
 </table>
-<table x="764" y="245" name="RecipeStepIngredient">
+<table x="761" y="207" name="RecipeStepIngredient">
 <row name="RecipeStepID" null="1" autoincrement="1">
 <datatype>INTEGER</datatype>
 <default>NULL</default></row>
 <row name="IngredientID" null="1" autoincrement="0">
 <datatype>INTEGER</datatype>
+<default>NULL</default></row>
+<row name="UnitOfMeasure" null="1" autoincrement="0">
+<datatype>VARCHAR</datatype>
+<default>NULL</default></row>
+<row name="Amount" null="1" autoincrement="0">
+<datatype>DECIMAL</datatype>
 <default>NULL</default></row>
 <key type="PRIMARY" name="">
 <part>RecipeStepID</part>
