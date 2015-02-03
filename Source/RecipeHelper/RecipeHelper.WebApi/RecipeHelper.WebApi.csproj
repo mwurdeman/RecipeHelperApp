@@ -247,6 +247,10 @@
       <Project>{8a171d8d-2e6d-4ff0-9939-363ab13652f3}</Project>
       <Name>RecipeHelper.Domain</Name>
     </ProjectReference>
+    <ProjectReference Include="..\RecipeHelper.SqlRepository\RecipeHelper.SqlRepository.csproj">
+      <Project>{e921d4be-5851-4eef-b678-2402537ac87d}</Project>
+      <Name>RecipeHelper.SqlRepository</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

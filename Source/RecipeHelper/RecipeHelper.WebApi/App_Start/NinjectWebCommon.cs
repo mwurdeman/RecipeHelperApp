@@ -10,6 +10,9 @@ namespace RecipeHelper.WebApi.App_Start
 
     using Ninject;
     using Ninject.Web.Common;
+    using System.Configuration;
+    using RecipeHelper.Domain.Repositories;
+    using RecipeHelper.SqlRepository;
 
     public static class NinjectWebCommon 
     {
@@ -61,7 +64,15 @@ namespace RecipeHelper.WebApi.App_Start
         /// <param name="kernel">The kernel.</param>
         private static void RegisterServices(IKernel kernel)
         {
+            string connectionString = ConfigurationManager.ConnectionStrings["RecipeHelperDatabase"].ConnectionString;
 
+            kernel.Bind<ICategoryRepository>().To<CategoryRepository>()
+                .WithConstructorArgument("connectionString", connectionString);
+            kernel.Bind<IDishRepository>().To<DishRepository>()
+                .WithConstructorArgument("connectionString", connectionString);
+            kernel.Bind<IStyleRepository>().To<StyleRepository>()
+                .WithConstructorArgument("connectionString", connectionString);
+        
         }        
     }
 }
