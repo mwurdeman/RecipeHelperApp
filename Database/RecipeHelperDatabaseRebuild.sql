@@ -46,8 +46,7 @@ CREATE TABLE [dbo].[Ingredient](
 	[IngredientID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
-	[StockingUnit] [varchar](50) NOT NULL,
-	[StockingSize] [varchar](50) NOT NULL,
+	[StockingUnit] [varchar](50) NOT NULL
  CONSTRAINT [PK_Ingredient] PRIMARY KEY CLUSTERED 
 (
 	[IngredientID] ASC
@@ -118,7 +117,7 @@ CREATE TABLE [dbo].[RecipeIngredient](
 	[RecipeID] [int] NOT NULL,
 	[IngredientID] [int] NOT NULL,
 	[UnitOfMeasure] [varchar](50) NOT NULL,
-	[Amont] [int] NOT NULL,
+	[Amount] [int] NOT NULL,
  CONSTRAINT [PK_RecipeIngredient] PRIMARY KEY CLUSTERED 
 (
 	[RecipeID] ASC,
@@ -309,6 +308,11 @@ INSERT INTO Category
 VALUES
 ('Fish');
 
+INSERT INTO Category
+(Name)
+VALUES
+('Hamburger');
+
 INSERT INTO Style
 (Name)
 VALUES
@@ -334,6 +338,161 @@ INSERT INTO Style
 VALUES
 ('Stew');
 
+INSERT INTO Style
+(Name)
+VALUES
+('American');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Other');
+
+INSERT INTO Style
+(Name)
+VALUES
+('Crockpot');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Cream of Mushroom', '', '10 1/2 Oz Can');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Cream of Chicken', '', '10 1/2 Oz Can');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Yellow Onion', '', 'Each');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Red Onion', '', 'Each');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Red Pepper', '', 'Each');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Green Pepper', '', 'Each');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Hamburger', '', 'LBS');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Chicken', '', 'LBS');
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit)
+VALUES
+('Pork Chops', '', 'LBS');
+
+--INSERT INTO Recipe
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--VALUES
+--('Memphis Pulled Pork', 'A yummy Memphis styled BBQ crockpot recipe', 'Publix', '6', '30 minutes', '6 to 8 hours', CURRENT_TIMESTAMP);
+
+--INSERT INTO Recipe
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--VALUES
+--('Cheeseburger', 'Good ole American food', 'Homemade', '6', '5 minutes', '15 minutes', CURRENT_TIMESTAMP);
+
+--INSERT INTO Recipe
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--VALUES
+--('Breaded Tilapia', 'Quick and simpled baked Tilapia order that is full of tasts', 'Internet', '4', '10 minutes', '15 minutes', CURRENT_TIMESTAMP);
+
+--INSERT INTO Recipe
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--VALUES
+--('Chicken Stir Fry', 'Healthly but still yummy!', 'Homemade', '5', '20 minutes', '10 minutes', CURRENT_TIMESTAMP);
+
+--INSERT INTO RecipeDish
+--(RecipeID, DishID)
+--VALUES
+--(1, 3);
+
+--INSERT INTO RecipeDish
+--(RecipeID, DishID)
+--VALUES
+--(2, 2);
+
+--INSERT INTO RecipeDish
+--(RecipeID, DishID)
+--VALUES
+--(2, 3);
+
+--INSERT INTO RecipeDish
+--(RecipeID, DishID)
+--VALUES
+--(3, 3);
+
+--INSERT INTO RecipeDish
+--(RecipeID, DishID)
+--VALUES
+--(4, 3);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(1, 1);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(1, 6);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(1, 8);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(2, 6);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(3, 7);
+
+--INSERT INTO RecipeStyle
+--(RecipeID, StyleID)
+--VALUES
+--(4, 2);
+
+--INSERT INTO RecipeCategory
+--(RecipeID, CategoryID)
+--VALUES
+--(1, 2);
+
+--INSERT INTO RecipeCategory
+--(RecipeID, CategoryID)
+--VALUES
+--(2, 8);
+
+--INSERT INTO RecipeCategory
+--(RecipeID, CategoryID)
+--VALUES
+--(3, 7);
+
+--INSERT INTO RecipeCategory
+--(RecipeID, CategoryID)
+--VALUES
+--(4, 1);
+
 --SELECT FROM TABLES
 SELECT * FROM dbo.Recipe
 SELECT * FROM dbo.Ingredient
@@ -342,3 +501,7 @@ SELECT * FROM dbo.Category
 SELECT * FROM dbo.Dish
 SELECT * FROM dbo.RecipeStep
 SELECT * FROM dbo.RecipeIngredient
+SELECT * FROM dbo.RecipeStepIngredient
+SELECT * FROM dbo.RecipeCategory
+SELECT * FROM dbo.RecipeDish
+SELECT * FROM dbo.RecipeStyle
