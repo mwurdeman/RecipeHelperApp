@@ -48,6 +48,8 @@
     <Compile Include="RecipeStyle.cs" />
     <Compile Include="Repositories\ICategoryRepository.cs" />
     <Compile Include="Repositories\IDishRepository.cs" />
+    <Compile Include="Repositories\IRecipeGroupsRepository.cs" />
+    <Compile Include="Repositories\IRecipeRepository.cs" />
     <Compile Include="Repositories\IStyleRepository.cs" />
     <Compile Include="Style.cs" />
   </ItemGroup>

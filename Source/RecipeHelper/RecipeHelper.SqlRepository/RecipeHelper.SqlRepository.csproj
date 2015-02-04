@@ -49,6 +49,7 @@
     <Compile Include="DataReaderExtension.cs" />
     <Compile Include="DishRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecipeRepository.cs" />
     <Compile Include="StyleRepository.cs" />
   </ItemGroup>
   <ItemGroup>
