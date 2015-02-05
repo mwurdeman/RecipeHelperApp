@@ -34,8 +34,8 @@ BEGIN
 		R.CreatedDate,
 		R.ModifiedDate,
 		S.StyleID,
-		S.Name,
-		S.Description
+		S.Name as 'StyleName',
+		S.Description as 'StyleDescription'
 	FROM Recipe R
 		JOIN RecipeStyle RS ON R.RecipeID = RS.RecipeID
 		JOIN Style S ON RS.StyleID = S.StyleID

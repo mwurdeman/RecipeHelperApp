@@ -72,7 +72,9 @@ namespace RecipeHelper.WebApi.App_Start
                 .WithConstructorArgument("connectionString", connectionString);
             kernel.Bind<IStyleRepository>().To<StyleRepository>()
                 .WithConstructorArgument("connectionString", connectionString);
-        
+            kernel.Bind<IRecipeRepository>().To<RecipeRepository>()
+                .WithConstructorArgument("connectionString", connectionString);
+
         }        
     }
 }

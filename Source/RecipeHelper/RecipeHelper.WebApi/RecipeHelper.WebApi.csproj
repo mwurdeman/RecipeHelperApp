@@ -172,6 +172,10 @@
     <Compile Include="Controllers\CategoryController.cs" />
     <Compile Include="Controllers\DishController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\RecipeCategoryController.cs" />
+    <Compile Include="Controllers\RecipeController.cs" />
+    <Compile Include="Controllers\RecipeDishController.cs" />
+    <Compile Include="Controllers\RecipeStyleController.cs" />
     <Compile Include="Controllers\StyleController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">

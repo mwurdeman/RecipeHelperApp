@@ -34,8 +34,8 @@ BEGIN
 		R.CreatedDate,
 		R.ModifiedDate,
 		D.DishID,
-		D.Name,
-		D.Description
+		D.Name as 'DishName',
+		D.Description as 'DishDescription'
 	FROM Recipe R
 		JOIN RecipeDish RD ON R.RecipeID = RD.RecipeID
 		JOIN Dish D ON RD.DishID = D.DishID

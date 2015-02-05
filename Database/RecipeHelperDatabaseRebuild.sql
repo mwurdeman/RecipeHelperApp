@@ -399,24 +399,24 @@ VALUES
 ('Pork Chops', '', 'LBS');
 
 --INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
 --VALUES
---('Memphis Pulled Pork', 'A yummy Memphis styled BBQ crockpot recipe', 'Publix', '6', '30 minutes', '6 to 8 hours', CURRENT_TIMESTAMP);
+--('Memphis Pulled Pork', 'A yummy Memphis styled BBQ crockpot recipe', 'Publix', '6', '30 minutes', '6 to 8 hours', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
 --VALUES
---('Cheeseburger', 'Good ole American food', 'Homemade', '6', '5 minutes', '15 minutes', CURRENT_TIMESTAMP);
+--('Cheeseburger', 'Good ole American food', 'Homemade', '6', '5 minutes', '15 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
 --VALUES
---('Breaded Tilapia', 'Quick and simpled baked Tilapia order that is full of tasts', 'Internet', '4', '10 minutes', '15 minutes', CURRENT_TIMESTAMP);
+--('Breaded Tilapia', 'Quick and simpled baked Tilapia order that is full of tasts', 'Internet', '4', '10 minutes', '15 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate)
+--(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
 --VALUES
---('Chicken Stir Fry', 'Healthly but still yummy!', 'Homemade', '5', '20 minutes', '10 minutes', CURRENT_TIMESTAMP);
+--('Chicken Stir Fry', 'Healthly but still yummy!', 'Homemade', '5', '20 minutes', '10 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 --INSERT INTO RecipeDish
 --(RecipeID, DishID)

@@ -34,8 +34,8 @@ BEGIN
 		R.CreatedDate,
 		R.ModifiedDate,
 		C.CategoryID,
-		C.Name,
-		C.Description
+		C.Name as 'CategoryName',
+		C.Description as 'CategoryDescription'
 	FROM Recipe R
 		JOIN RecipeCategory RC ON R.RecipeID = RC.RecipeID
 		JOIN Category C ON RC.CategoryID = C.CategoryID
