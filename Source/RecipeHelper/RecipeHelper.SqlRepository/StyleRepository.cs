@@ -14,10 +14,12 @@ namespace RecipeHelper.SqlRepository
 {
     public class StyleRepository : IStyleRepository
     {
-        //private database variable
         private Database _database;
         private readonly string USP_STYLE_GETALL = "usp_Style_GetAll";
         private readonly string USP_STYLE_GETBYID = "usp_Style_GetByID";
+        private readonly string USP_STYLE_ADD = "usp_Style_Add";
+        private readonly string USP_STYLE_UPDATE = "usp_Style_Update";
+        private readonly string USP_STYLE_DELETE = "usp_Style_Delete";
 
         public StyleRepository(string connectionString)
         {
@@ -82,17 +84,49 @@ namespace RecipeHelper.SqlRepository
 
         public void AddStyle(Style style)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_STYLE_ADD);
+            this._database.AddInParameter(cmd, "@Name", DbType.String, style.Name);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, style.Description);
+
+            try
+            {
+                style.ID = (int)this._database.ExecuteScalar(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void UpdatStyle(Style style)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_STYLE_UPDATE);
+            this._database.AddInParameter(cmd, "@StyleID", DbType.Int32, style.ID);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, style.Description);
+
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void DeleteStyle(int styleID)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_STYLE_DELETE);
+            this._database.AddInParameter(cmd, "@StyleID", DbType.Int32, styleID);
+
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

@@ -14,10 +14,12 @@ namespace RecipeHelper.SqlRepository
 {
     public class DishRepository : IDishRepository
     {
-        //private database variable
         private Database _database;
         private readonly string USP_DISH_GETALL = "usp_Dish_GetAll";
         private readonly string USP_DISH_GETBYID = "usp_Dish_GetByID";
+        private readonly string USP_DISH_ADD = "usp_Dish_Add";
+        private readonly string USP_DISH_UPDATE = "usp_Dish_Update";
+        private readonly string USP_DISH_DELETE = "usp_Dish_Delete";
 
         public DishRepository(string connectionString)
         {
@@ -83,17 +85,49 @@ namespace RecipeHelper.SqlRepository
 
         public void AddDish(Dish dish)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_DISH_ADD);
+            this._database.AddInParameter(cmd, "@Name", DbType.String, dish.Name);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, dish.Description);
+
+            try
+            {
+                dish.ID = (int)this._database.ExecuteScalar(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void UpdateDish(Dish dish)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_DISH_UPDATE);
+            this._database.AddInParameter(cmd, "@DishID", DbType.Int32, dish.ID);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, dish.Description);
+
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void DeleteDish(int dishID)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_DISH_DELETE);
+            this._database.AddInParameter(cmd, "@DishID", DbType.Int32, dishID);
+           
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

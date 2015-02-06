@@ -31,24 +31,63 @@ namespace RecipeHelper.WebApi.Controllers
         }
 
         // POST: api/Style
-        public void Post([FromBody]Style style)
+        public HttpResponseMessage Post([FromBody]Style style)
         {
-            //TODO: Add Validation of Style?
-            _repository.AddStyle(style);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    this._repository.AddStyle(style);
+                    return Request.CreateResponse(HttpStatusCode.Created, style);
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            } 
         }
 
         // PUT: api/Style/5
-        public void Put(int id, [FromBody]Style style)
+        public HttpResponseMessage Put(int id, [FromBody]Style style)
         {
-            //TODO: Get Style first and then Update
-            _repository.UpdatStyle(style);
+            Style s = this._repository.GetStyleByID(id);
+
+            if (s == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Category object was not found");
+            }
+            else
+            {
+                s.Description = style.Description;
+            }
+
+            try
+            {
+                this._repository.UpdatStyle(s);
+                return Request.CreateResponse(HttpStatusCode.OK, s);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         // DELETE: api/Style/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            //TODO: Check to see if style exists first
-            _repository.DeleteStyle(id);
+            try
+            {
+                this._repository.DeleteStyle(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            } 
         }
     }
 }

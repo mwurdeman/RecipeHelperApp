@@ -31,21 +31,63 @@ namespace RecipeHelper.WebApi.Controllers
         }
 
         // POST: api/Dish
-        public void Post([FromBody]Dish dish)
+        public HttpResponseMessage Post([FromBody]Dish dish)
         {
-            this._repository.AddDish(dish);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    this._repository.AddDish(dish);
+                    return Request.CreateResponse(HttpStatusCode.Created, dish);
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            } 
         }
 
         // PUT: api/Dish/5
-        public void Put(int id, [FromBody]Dish dish)
+        public HttpResponseMessage Put(int id, [FromBody]Dish dish)
         {
-            this._repository.UpdateDish(dish);
+            Dish d = this._repository.GetDishByID(id);
+
+            if (d == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Category object was not found");
+            }
+            else
+            {
+                d.Description = dish.Description;
+            }
+
+            try
+            {
+                this._repository.UpdateDish(d);
+                return Request.CreateResponse(HttpStatusCode.OK, d);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         // DELETE: api/Dish/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            this._repository.DeleteDish(id);
+            try
+            {
+                this._repository.DeleteDish(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            } 
         }
     }
 }

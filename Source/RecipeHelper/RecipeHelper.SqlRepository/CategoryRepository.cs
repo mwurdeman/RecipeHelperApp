@@ -14,10 +14,12 @@ namespace RecipeHelper.SqlRepository
 {
     public class CategoryRepository : ICategoryRepository
     {
-        //private database variable
         private Database _database;
         private readonly string USP_CATEGORY_ALL = "usp_Category_GetAll";
         private readonly string USP_CATEGORY_GETBYID = "usp_Category_GetByID";
+        private readonly string USP_CATEGORY_ADD = "usp_Category_Add";
+        private readonly string USP_CATEGORY_UPDATE = "usp_Category_Update";
+        private readonly string USP_CATEGORY_DELETE = "usp_Category_Delete";
 
         public CategoryRepository(string connectionString)
         {
@@ -82,17 +84,49 @@ namespace RecipeHelper.SqlRepository
 
         public void AddCategory(Category category)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_CATEGORY_ADD);
+            this._database.AddInParameter(cmd, "@Name", DbType.String, category.Name);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, category.Description);
+
+            try
+            {
+                category.ID = (int)this._database.ExecuteScalar(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void UpdateCategory(Category category)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_CATEGORY_UPDATE);
+            this._database.AddInParameter(cmd, "@CategoryID", DbType.Int32, category.ID);
+            this._database.AddInParameter(cmd, "@Description", DbType.String, category.Description);
+
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
 
         public void DeleteCategory(int categoryID)
         {
-            throw new NotImplementedException();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_CATEGORY_DELETE);
+            this._database.AddInParameter(cmd, "@CategoryID", DbType.Int32, categoryID);
+
+            try
+            {
+                this._database.ExecuteNonQuery(cmd);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

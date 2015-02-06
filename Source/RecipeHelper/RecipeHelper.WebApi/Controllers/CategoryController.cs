@@ -31,21 +31,63 @@ namespace RecipeHelper.WebApi.Controllers
         }
 
         // POST: api/Category
-        public void Post([FromBody]Category category)
+        public HttpResponseMessage Post([FromBody]Category category)
         {
-            this._repository.AddCategory(category);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    this._repository.AddCategory(category);
+                    return Request.CreateResponse(HttpStatusCode.Created, category);
+                }
+                catch (Exception ex)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+                }
+            }
+            else
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ModelState);
+            }          
         }
 
         // PUT: api/Category/5
-        public void Put(int id, [FromBody]Category category)
+        public HttpResponseMessage Put(int id, [FromBody]Category category)
         {
-            this._repository.UpdateCategory(category);
+            Category c = this._repository.GetCategoryByID(id);
+
+            if (c == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Category object was not found");
+            }
+            else
+            {
+                c.Description = category.Description;
+            }
+
+            try
+            {
+                this._repository.UpdateCategory(c);
+                return Request.CreateResponse(HttpStatusCode.OK, c);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
         }
 
         // DELETE: api/Category/5
-        public void Delete(int id)
+        public HttpResponseMessage Delete(int id)
         {
-            this._repository.DeleteCategory(id);
+            try
+            {
+                this._repository.DeleteCategory(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            } 
         }
     }
 }
