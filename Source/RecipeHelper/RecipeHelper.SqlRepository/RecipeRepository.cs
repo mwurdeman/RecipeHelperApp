@@ -104,7 +104,8 @@ namespace RecipeHelper.SqlRepository
                     recipes.Add(this.BuildRecipeObjectFromReader(reader));
                 }
 
-                recipeDish.Recipes = recipes;  
+                recipeDish.Recipes = recipes;
+                reader.Close();
             }
             catch
             {
@@ -117,13 +118,73 @@ namespace RecipeHelper.SqlRepository
         public RecipeStyle GetRecipesByStyleID(int styleID)
         {
             RecipeStyle recipeStyle = null;
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_RECIPE_GETBYSTYLEID);
+            this._database.AddInParameter(cmd, "@StyleID", DbType.Int32, styleID);
 
+            try
+            {
+                IDataReader reader = _database.ExecuteReader(cmd);
+                List<Recipe> recipes = new List<Recipe>();
+                
+                while(reader.Read())
+                {
+                    if (recipeStyle == null)
+                    {
+                        recipeStyle = new RecipeStyle();
+
+                        recipeStyle.Style = new Style();
+                        recipeStyle.Style.ID = reader.GetInt32("StyleID");
+                        recipeStyle.Style.Name = reader.GetString("StyleName");
+                        recipeStyle.Style.Description = reader.GetString("StyleDescription");
+                    }
+
+                    recipes.Add(BuildRecipeObjectFromReader(reader));
+                }
+
+                recipeStyle.Recipes = recipes;
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
+           
             return recipeStyle;
         }
 
         public RecipeCategory GetRecipesByCategoryID(int categoryID)
         {
             RecipeCategory recipeCategory = null;
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_RECIPE_GETBYCATEGORYID);
+            this._database.AddInParameter(cmd, "@CategoryID", DbType.Int32, categoryID);
+            
+            try
+            {
+                IDataReader reader = this._database.ExecuteReader(cmd);
+                List<Recipe> recipes = new List<Recipe>();
+
+                while(reader.Read())
+                {
+                    if (recipeCategory == null)
+                    {
+                        recipeCategory = new RecipeCategory();
+
+                        recipeCategory.Category = new Category();
+                        recipeCategory.Category.ID = reader.GetInt32("CategoryID");
+                        recipeCategory.Category.Name = reader.GetString("CategoryName");
+                        recipeCategory.Category.Description = reader.GetString("CategoryDescription");
+                    }
+
+                    recipes.Add(BuildRecipeObjectFromReader(reader));
+                }
+
+                recipeCategory.Recipes = recipes;
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
 
             return recipeCategory;
         }
@@ -155,7 +216,9 @@ namespace RecipeHelper.SqlRepository
             recipe.PrepTime = reader.GetString("Preptime");
             recipe.TotalRecipeTime = reader.GetString("TotalRecipeTime");
             recipe.CreatedDate = reader.GetDateTime("CreatedDate");
+            recipe.CreatedBy = reader.GetInt32("CreatedBy");
             recipe.ModifiedDate = reader.GetDateTime("ModifiedDate");
+            recipe.ModifiedBy = reader.GetInt32("ModifiedBy");
 
             return recipe;
         }
