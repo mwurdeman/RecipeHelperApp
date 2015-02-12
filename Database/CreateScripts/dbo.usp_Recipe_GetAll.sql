@@ -39,3 +39,4 @@ GO
 
 PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetAll'
 GRANT EXECUTE on [dbo].[usp_Recipe_GetAll] TO RecipeHelperUser
+GO
