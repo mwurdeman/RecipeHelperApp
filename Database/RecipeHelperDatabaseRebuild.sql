@@ -11,6 +11,7 @@ SET ANSI_PADDING ON
 GO
 
 --DROP TABLES
+PRINT 'DROPPING TABLES'
 DROP TABLE dbo.RecipeStyle
 DROP TABLE dbo.RecipeCategory
 DROP TABLE dbo.RecipeDish
@@ -27,6 +28,7 @@ DROP TABLE dbo.Recipe
 DROP TABLE dbo.RecipeUser
 
 --CREATE TABLES
+PRINT 'CREATING TABLES'
 CREATE TABLE [dbo].[RecipeUser](
 	[RecipeUserID] [int] IDENTITY(1,1) NOT NULL,
 	[FirstName] [VARCHAR](100) NOT NULL,
@@ -334,7 +336,649 @@ GO
 ALTER TABLE [dbo].[RecipeStyle] CHECK CONSTRAINT [FK_RecipeStyle_Style]
 GO
 
+--CREATE STORED PROCEDURES
+PRINT 'CREATING Stored Procedures'
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Category_GetAll') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'Dropping Procedure - usp_Category_GetAll'
+	DROP PROCEDURE [dbo].[usp_Category_GetAll];
+END
+GO
+
+PRINT 'Creating Procedure - [dbo].[usp_Category_GetAll]'
+GO
+CREATE PROCEDURE usp_Category_GetAll
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+    Select CategoryID,
+		Name,
+		Description
+	FROM dbo.Category;
+
+END
+GO
+
+PRINT 'Grant EXECUTE to procedure - [dbo].[usp_Category_GetAll]'
+GRANT EXECUTE ON dbo.usp_Category_GetAll TO RecipeHelperUser;
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Category_GetByID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'Dropping Procedure - usp_Category_GetByID'
+	DROP PROCEDURE [dbo].[usp_Category_GetByID];
+END
+GO
+
+PRINT 'Creating Procedure - [dbo].[usp_Category_GetByID]'
+GO
+CREATE PROCEDURE usp_Category_GetByID
+(	
+	@CategoryID INT
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+    Select CategoryID,
+		Name,
+		Description
+	FROM dbo.Category
+	WHERE CategoryID = @CategoryID;
+
+END
+GO
+
+PRINT 'Grant EXECUTE to procedure - [dbo].[usp_Category_GetByID]'
+GRANT EXECUTE ON dbo.usp_Category_GetByID TO RecipeHelperUser;
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Category_Add') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Category_Add'
+	DROP PROCEDURE [dbo].[usp_Category_Add]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Category_Add'
+GO
+CREATE PROCEDURE [dbo].[usp_Category_Add]
+(
+	@Name VARCHAR(150),
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	INSERT INTO dbo.Category
+	(Name, Description)
+	VALUES
+	(@Name, @Description);
+
+	SELECT CONVERT(int, SCOPE_IDENTITY());
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Category_Add'
+GRANT EXECUTE ON [dbo].[usp_Category_Add] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Category_Update') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Category_Update'
+	DROP PROCEDURE [dbo].[usp_Category_Update]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Category_Update'
+GO
+CREATE PROCEDURE [dbo].[usp_Category_Update]
+(
+	@CategoryID INT,
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	UPDATE Category
+	SET Description = @Description
+	WHERE CategoryID = @CategoryID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Category_Update'
+GRANT EXECUTE ON [dbo].[usp_Category_Update] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Category_Delete') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Category_Delete'
+	DROP PROCEDURE [dbo].[usp_Category_Delete]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Category_Delete'
+GO
+CREATE PROCEDURE [dbo].[usp_Category_Delete]
+(
+	@CategoryID INT
+)
+AS
+BEGIN
+
+	DELETE FROM dbo.Category
+	WHERE CategoryID = @CategoryID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Category_Delete'
+GRANT EXECUTE ON [dbo].[usp_Category_Delete] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Dish_GetByID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'Dropping Procedure - usp_Dish_GetByID'
+	DROP PROCEDURE [dbo].[usp_Dish_GetByID];
+END
+GO
+
+PRINT 'Creating Procedure - [dbo].[usp_Dish_GetByID]'
+GO
+CREATE PROCEDURE [dbo].[usp_Dish_GetByID]
+(	
+	@DishID INT
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+    Select DishID,
+		Name,
+		Description
+	FROM dbo.Dish
+	WHERE DishID = @DishID;
+
+END
+GO
+
+PRINT 'Grant EXECUTE to procedure - [dbo].[usp_Dish_GetByID]'
+GRANT EXECUTE ON dbo.usp_Dish_GetByID TO RecipeHelperUser;
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Dish_GetAll') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'Dropping Procedure - usp_Dish_GetAll'
+	DROP PROCEDURE [dbo].[usp_Dish_GetAll];
+END
+GO
+
+PRINT 'Creating Procedure - [dbo].[usp_Dish_GetAll]'
+GO
+CREATE PROCEDURE [dbo].[usp_Dish_GetAll]
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+    Select DishID,
+		Name,
+		Description
+	FROM dbo.Dish;
+
+END
+GO
+
+PRINT 'Grant EXECUTE to procedure - [dbo].[usp_Dish_GetAll]'
+GRANT EXECUTE ON dbo.usp_Dish_GetAll TO RecipeHelperUser;
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Dish_Add') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Dish_Add'
+	DROP PROCEDURE [dbo].[usp_Dish_Add]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Dish_Add'
+GO
+CREATE PROCEDURE [dbo].[usp_Dish_Add]
+(
+	@Name VARCHAR(150),
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	INSERT INTO dbo.Dish
+	(Name, Description)
+	VALUES
+	(@Name, @Description);
+
+	SELECT CONVERT(int, SCOPE_IDENTITY());
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Dish_Add'
+GRANT EXECUTE ON [dbo].[usp_Dish_Add] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Dish_Update') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Dish_Update'
+	DROP PROCEDURE [dbo].[usp_Dish_Update]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Dish_Update'
+GO
+CREATE PROCEDURE [dbo].[usp_Dish_Update]
+(
+	@DishID INT,
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	UPDATE Dish
+	SET Description = @Description
+	WHERE DishID = @DishID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Dish_Update'
+GRANT EXECUTE ON [dbo].[usp_Dish_Update] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Dish_Delete') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Dish_Delete'
+	DROP PROCEDURE [dbo].[usp_Dish_Delete]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Dish_Delete'
+GO
+CREATE PROCEDURE [dbo].[usp_Dish_Delete]
+(
+	@DishID INT
+)
+AS
+BEGIN
+
+	DELETE FROM dbo.Dish
+	WHERE DishID = @DishID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Dish_Delete'
+GRANT EXECUTE ON [dbo].[usp_Dish_Delete] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = object_id(N'usp_Style_GetByID') AND TYPE IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Style_GetByID'
+	DROP PROCEDURE [dbo].[usp_Style_GetByID]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Style_GetByID'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Style_GetByID]
+(
+	@StyleID int
+)
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	SELECT 
+		StyleID,
+		Name,
+		Description
+	FROM dbo.Style
+	WHERE StyleID = @StyleID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE to procedure - dbo.usp_Style_GetByID'
+GRANT EXECUTE ON [dbo].[usp_Style_GetByID] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = object_id(N'usp_Style_GetAll') AND TYPE IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Style_GetAll'
+	DROP PROCEDURE [dbo].[usp_Style_GetAll]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Style_GetAll'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Style_GetAll]
+AS
+BEGIN
+
+	SET NOCOUNT ON;
+
+	SELECT 
+		StyleID,
+		Name,
+		Description
+	FROM dbo.Style;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE to procedure - dbo.usp_Style_GetAll'
+GRANT EXECUTE ON [dbo].[usp_Style_GetAll] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Style_Add') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Style_Add'
+	DROP PROCEDURE [dbo].[usp_Style_Add]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Style_Add'
+GO
+CREATE PROCEDURE [dbo].[usp_Style_Add]
+(
+	@Name VARCHAR(150),
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	INSERT INTO dbo.Style
+	(Name, Description)
+	VALUES
+	(@Name, @Description);
+
+	SELECT CONVERT(int, SCOPE_IDENTITY());
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Style_Add'
+GRANT EXECUTE ON [dbo].[usp_Style_Add] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Style_Update') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Style_Update'
+	DROP PROCEDURE [dbo].[usp_Style_Update]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Style_Update'
+GO
+CREATE PROCEDURE [dbo].[usp_Style_Update]
+(
+	@StyleID INT,
+	@Description VARCHAR(250)
+)
+AS
+BEGIN
+
+	UPDATE Style
+	SET Description = @Description
+	WHERE StyleID = @StyleID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Style_Update'
+GRANT EXECUTE ON [dbo].[usp_Style_Update] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Style_Delete') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - usp_Style_Delete'
+	DROP PROCEDURE [dbo].[usp_Style_Delete]
+END 
+GO
+
+PRINT 'CREATE Procedure - usp_Style_Delete'
+GO
+CREATE PROCEDURE [dbo].[usp_Style_Delete]
+(
+	@StyleID INT
+)
+AS
+BEGIN
+
+	DELETE FROM dbo.Style
+	WHERE StyleID = @StyleID;
+
+END
+GO
+
+PRINT 'GRANT EXECUTE on procedure - usp_Style_Delete'
+GRANT EXECUTE ON [dbo].[usp_Style_Delete] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Recipe_GetByID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Recipe_GetByID'
+	DROP PROCEDURE [dbo].[usp_Recipe_GetByID]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Recipe_GetByID'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Recipe_GetByID]
+(
+	@RecipeID INT
+)
+AS
+BEGIN
+
+	SELECT 
+		R.RecipeID,
+		R.Name,
+		R.Description,
+		R.Source,
+		R.Servings,
+		R.PrepTime,
+		R.TotalRecipeTime,
+		R.CreatedDate,
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy
+	FROM Recipe R
+	WHERE R.RecipeID = @RecipeID;
+
+END
+GO
+
+PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetByID'
+GRANT EXECUTE on [dbo].[usp_Recipe_GetByID] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Recipe_GetAll') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Recipe_GetAll'
+	DROP PROCEDURE [dbo].[usp_Recipe_GetAll]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Recipe_GetAll'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Recipe_GetAll]
+AS
+BEGIN
+
+	SELECT 
+		R.RecipeID,
+		R.Name,
+		R.Description,
+		R.Source,
+		R.Servings,
+		R.PrepTime,
+		R.TotalRecipeTime,
+		R.CreatedDate,
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy
+	FROM Recipe R;
+
+END
+GO
+
+PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetAll'
+GRANT EXECUTE on [dbo].[usp_Recipe_GetAll] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Recipe_GetByCategoryID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Recipe_GetByCategoryID'
+	DROP PROCEDURE [dbo].[usp_Recipe_GetByCategoryID]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Recipe_GetByCategoryID'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Recipe_GetByCategoryID]
+(
+	@CategoryID INT
+)
+AS
+BEGIN
+
+	SELECT 
+		R.RecipeID,
+		R.Name,
+		R.Description,
+		R.Source,
+		R.Servings,
+		R.PrepTime,
+		R.TotalRecipeTime,
+		R.CreatedDate,
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy,
+		C.CategoryID,
+		C.Name as 'CategoryName',
+		C.Description as 'CategoryDescription'
+	FROM Recipe R
+		JOIN RecipeCategory RC ON R.RecipeID = RC.RecipeID
+		JOIN Category C ON RC.CategoryID = C.CategoryID
+	WHERE C.CategoryID = @CategoryID;
+
+END
+GO
+
+PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetByCategoryID'
+GRANT EXECUTE on [dbo].[usp_Recipe_GetByCategoryID] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Recipe_GetByDishID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Recipe_GetByDishID'
+	DROP PROCEDURE [dbo].[usp_Recipe_GetByDishID]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Recipe_GetByDishID'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Recipe_GetByDishID]
+(
+	@DishID INT
+)
+AS
+BEGIN
+
+	SELECT 
+		R.RecipeID,
+		R.Name,
+		R.Description,
+		R.Source,
+		R.Servings,
+		R.PrepTime,
+		R.TotalRecipeTime,
+		R.CreatedDate,
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy,
+		D.DishID,
+		D.Name as 'DishName',
+		D.Description as 'DishDescription'
+	FROM Recipe R
+		JOIN RecipeDish RD ON R.RecipeID = RD.RecipeID
+		JOIN Dish D ON RD.DishID = D.DishID
+	WHERE D.DishID = @DishID;
+
+END
+GO
+
+PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetByDishID'
+GRANT EXECUTE on [dbo].[usp_Recipe_GetByDishID] TO RecipeHelperUser
+GO
+
+IF EXISTS(SELECT object_id FROM sys.objects WHERE object_id = OBJECT_ID(N'usp_Recipe_GetByStyleID') AND type IN (N'P', N'PC'))
+BEGIN
+	PRINT 'DROP Procedure - dbo.usp_Recipe_GetByStyleID'
+	DROP PROCEDURE [dbo].[usp_Recipe_GetByStyleID]
+END
+GO
+
+PRINT 'CREATE Procedure - dbo.usp_Recipe_GetByStyleID'
+GO
+
+CREATE PROCEDURE [dbo].[usp_Recipe_GetByStyleID]
+(
+	@StyleID INT
+)
+AS
+BEGIN
+
+	SELECT 
+		R.RecipeID,
+		R.Name,
+		R.Description,
+		R.Source,
+		R.Servings,
+		R.PrepTime,
+		R.TotalRecipeTime,
+		R.CreatedDate,
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy,
+		S.StyleID,
+		S.Name as 'StyleName',
+		S.Description as 'StyleDescription'
+	FROM Recipe R
+		JOIN RecipeStyle RS ON R.RecipeID = RS.RecipeID
+		JOIN Style S ON RS.StyleID = S.StyleID
+	WHERE S.StyleID = @StyleID;
+
+END
+GO
+
+PRINT 'GRANT Execute to Procedure - dbo.usp_Recipe_GetByStyleID'
+GRANT EXECUTE on [dbo].[usp_Recipe_GetByStyleID] TO RecipeHelperUser
+GO
+
 --INSERT INTO TABLES
+PRINT 'INSERTING SEED DATA'
 INSERT INTO Dish
 (Name)
 VALUES
@@ -586,17 +1230,17 @@ VALUES
 (4, 1);
 
 --SELECT FROM TABLES
-SELECT * FROM dbo.RecipeUser
-SELECT * FROM dbo.Recipe
-SELECT * FROM dbo.Comment
-SELECT * FROM dbo.Review
-SELECT * FROM dbo.Ingredient
-SELECT * FROM dbo.Style
-SELECT * FROM dbo.Category
-SELECT * FROM dbo.Dish
-SELECT * FROM dbo.RecipeStep
-SELECT * FROM dbo.RecipeIngredient
-SELECT * FROM dbo.RecipeStepIngredient
-SELECT * FROM dbo.RecipeCategory
-SELECT * FROM dbo.RecipeDish
-SELECT * FROM dbo.RecipeStyle
+--SELECT * FROM dbo.RecipeUser
+--SELECT * FROM dbo.Recipe
+--SELECT * FROM dbo.Comment
+--SELECT * FROM dbo.Review
+--SELECT * FROM dbo.Ingredient
+--SELECT * FROM dbo.Style
+--SELECT * FROM dbo.Category
+--SELECT * FROM dbo.Dish
+--SELECT * FROM dbo.RecipeStep
+--SELECT * FROM dbo.RecipeIngredient
+--SELECT * FROM dbo.RecipeStepIngredient
+--SELECT * FROM dbo.RecipeCategory
+--SELECT * FROM dbo.RecipeDish
+--SELECT * FROM dbo.RecipeStyle
