@@ -1,0 +1,43 @@
+USE [RecipeHelper]
+GO
+
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+SET ANSI_PADDING ON
+GO
+
+CREATE TABLE [dbo].[Comment](
+	[CommentID] [int] IDENTITY(1,1) NOT NULL,
+	[RecipeID] [int] NOT NULL,
+	[RecipeUserID] [int] NOT NULL,
+	[Comment] [VARCHAR](MAX) NOT NULL
+ CONSTRAINT [PK_CommentID] PRIMARY KEY CLUSTERED
+(
+	[CommentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Comment]  WITH CHECK ADD  CONSTRAINT [FK_Comment_RecipeID] FOREIGN KEY([RecipeID])
+REFERENCES [dbo].[Recipe] ([RecipeID])
+GO
+
+ALTER TABLE [dbo].[Comment] CHECK CONSTRAINT [FK_Comment_RecipeID]
+GO
+
+ALTER TABLE [dbo].[Comment]  WITH CHECK ADD  CONSTRAINT [FK_Comment_RecipeUserID] FOREIGN KEY([RecipeUserID])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Comment] CHECK CONSTRAINT [FK_Comment_RecipeUserID]
+GO
+
+SET ANSI_PADDING OFF
+GO
+
+

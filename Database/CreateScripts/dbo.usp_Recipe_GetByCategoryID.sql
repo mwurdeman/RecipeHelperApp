@@ -32,7 +32,9 @@ BEGIN
 		R.PrepTime,
 		R.TotalRecipeTime,
 		R.CreatedDate,
+		R.CreatedBy,
 		R.ModifiedDate,
+		R.ModifiedBy,
 		C.CategoryID,
 		C.Name as 'CategoryName',
 		C.Description as 'CategoryDescription'

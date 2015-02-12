@@ -29,7 +29,9 @@ BEGIN
 		R.PrepTime,
 		R.TotalRecipeTime,
 		R.CreatedDate,
-		R.ModifiedDate
+		R.CreatedBy,
+		R.ModifiedDate,
+		R.ModifiedBy
 	FROM Recipe R;
 
 END

@@ -21,9 +21,25 @@ DROP TABLE dbo.Category
 DROP TABLE dbo.Dish
 DROP TABLE dbo.Ingredient
 DROP TABLE dbo.RecipeStep
+DROP TABLE dbo.Comment
+DROP TABLE dbo.Review
 DROP TABLE dbo.Recipe
+DROP TABLE dbo.RecipeUser
 
 --CREATE TABLES
+CREATE TABLE [dbo].[RecipeUser](
+	[RecipeUserID] [int] IDENTITY(1,1) NOT NULL,
+	[FirstName] [VARCHAR](100) NOT NULL,
+	[LastName] [VARCHAR](100) NOT NULL,
+	[Active] [BIT] NOT NULL,
+ CONSTRAINT [PK_RecipeUserID] PRIMARY KEY CLUSTERED
+ (
+	[RecipeUserID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
 CREATE TABLE [dbo].[Recipe](
 	[RecipeID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](200) NOT NULL,
@@ -33,13 +49,84 @@ CREATE TABLE [dbo].[Recipe](
 	[PrepTime] [varchar](55) NOT NULL,
 	[TotalRecipeTime] [varchar](50) NOT NULL,
 	[CreatedDate] [datetime] NOT NULL,
-	[ModifiedDate] [datetime] NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Recipe] PRIMARY KEY CLUSTERED 
 (
 	[RecipeID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+
+ALTER TABLE [dbo].[Recipe]  WITH CHECK ADD  CONSTRAINT [FK_Recipe_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Recipe] CHECK CONSTRAINT [FK_Recipe_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Recipe]  WITH CHECK ADD  CONSTRAINT [FK_Recipe_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Recipe] CHECK CONSTRAINT [FK_Recipe_ModifiedBy]
+GO
+
+CREATE TABLE [dbo].[Comment](
+	[CommentID] [int] IDENTITY(1,1) NOT NULL,
+	[RecipeID] [int] NOT NULL,
+	[RecipeUserID] [int] NOT NULL,
+	[Comment] [VARCHAR](MAX) NOT NULL
+ CONSTRAINT [PK_CommentID] PRIMARY KEY CLUSTERED
+(
+	[CommentID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Comment]  WITH CHECK ADD  CONSTRAINT [FK_Comment_RecipeID] FOREIGN KEY([RecipeID])
+REFERENCES [dbo].[Recipe] ([RecipeID])
+GO
+
+ALTER TABLE [dbo].[Comment] CHECK CONSTRAINT [FK_Comment_RecipeID]
+GO
+
+ALTER TABLE [dbo].[Comment]  WITH CHECK ADD  CONSTRAINT [FK_Comment_RecipeUserID] FOREIGN KEY([RecipeUserID])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Comment] CHECK CONSTRAINT [FK_Comment_RecipeUserID]
+GO
+
+CREATE TABLE [dbo].[Review](
+	[ReviewID] [int] IDENTITY(1,1) NOT NULL,
+	[RecipeID] [int] NOT NULL,
+	[RecipeUserID] [int] NOT NULL,
+	[Review] [VARCHAR](MAX) NOT NULL,
+	[Rating] [int] NOT NULL
+ CONSTRAINT [PK_ReviewID] PRIMARY KEY CLUSTERED
+(
+	[ReviewID] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+
+GO
+
+ALTER TABLE [dbo].[Review]  WITH CHECK ADD  CONSTRAINT [FK_Review_RecipeID] FOREIGN KEY([RecipeID])
+REFERENCES [dbo].[Recipe] ([RecipeID])
+GO
+
+ALTER TABLE [dbo].[Review] CHECK CONSTRAINT [FK_Review_RecipeID]
+GO
+
+ALTER TABLE [dbo].[Review]  WITH CHECK ADD  CONSTRAINT [FK_Review_RecipeUserID] FOREIGN KEY([RecipeUserID])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Review] CHECK CONSTRAINT [FK_Review_RecipeUserID]
 GO
 
 CREATE TABLE [dbo].[Ingredient](
@@ -98,7 +185,7 @@ CREATE TABLE [dbo].[RecipeStep](
 	[StepInformation] [varchar](max) NOT NULL,
 	[CookingTime] [varchar](50) NOT NULL,
 	[CookingTemperature] [varchar](50) NOT NULL,
- CONSTRAINT [PK_RecipeStep] PRIMARY KEY CLUSTERED 
+ CONSTRAINT [PK_RecipeStep] PRIMARY KEY CLUSTERED
 (
 	[RecipeStepID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
@@ -106,7 +193,7 @@ CREATE TABLE [dbo].[RecipeStep](
 
 GO
 
-ALTER TABLE [dbo].[RecipeStep]  WITH CHECK ADD  CONSTRAINT [FK_RecipeStep_Recipe] FOREIGN KEY([RecipeID])
+ALTER TABLE [dbo].[RecipeStep] WITH CHECK ADD CONSTRAINT [FK_RecipeStep_Recipe] FOREIGN KEY([RecipeID])
 REFERENCES [dbo].[Recipe] ([RecipeID])
 GO
 
@@ -398,103 +485,111 @@ INSERT INTO Ingredient
 VALUES
 ('Pork Chops', '', 'LBS');
 
---INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
---VALUES
---('Memphis Pulled Pork', 'A yummy Memphis styled BBQ crockpot recipe', 'Publix', '6', '30 minutes', '6 to 8 hours', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO RecipeUser
+(FirstName, LastName, Active)
+VALUES
+('Matthew', 'Wurdeman', 1);
 
---INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
---VALUES
---('Cheeseburger', 'Good ole American food', 'Homemade', '6', '5 minutes', '15 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO Recipe
+(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy)
+VALUES
+('Memphis Pulled Pork', 'A yummy Memphis styled BBQ crockpot recipe', 'Publix', '6', '30 minutes', '6 to 8 hours', CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, 1);
 
---INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
---VALUES
---('Breaded Tilapia', 'Quick and simpled baked Tilapia order that is full of tasts', 'Internet', '4', '10 minutes', '15 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO Recipe
+(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy)
+VALUES
+('Cheeseburger', 'Good ole American food', 'Homemade', '6', '5 minutes', '15 minutes', CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, 1);
 
---INSERT INTO Recipe
---(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, ModifiedDate)
---VALUES
---('Chicken Stir Fry', 'Healthly but still yummy!', 'Homemade', '5', '20 minutes', '10 minutes', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO Recipe
+(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy)
+VALUES
+('Breaded Tilapia', 'Quick and simpled baked Tilapia order that is full of tasts', 'Internet', '4', '10 minutes', '15 minutes', CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, 1);
 
---INSERT INTO RecipeDish
---(RecipeID, DishID)
---VALUES
---(1, 3);
+INSERT INTO Recipe
+(Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy)
+VALUES
+('Chicken Stir Fry', 'Healthly but still yummy!', 'Homemade', '5', '20 minutes', '10 minutes', CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP, 1);
 
---INSERT INTO RecipeDish
---(RecipeID, DishID)
---VALUES
---(2, 2);
+INSERT INTO RecipeDish
+(RecipeID, DishID)
+VALUES
+(1, 3);
 
---INSERT INTO RecipeDish
---(RecipeID, DishID)
---VALUES
---(2, 3);
+INSERT INTO RecipeDish
+(RecipeID, DishID)
+VALUES
+(2, 2);
 
---INSERT INTO RecipeDish
---(RecipeID, DishID)
---VALUES
---(3, 3);
+INSERT INTO RecipeDish
+(RecipeID, DishID)
+VALUES
+(2, 3);
 
---INSERT INTO RecipeDish
---(RecipeID, DishID)
---VALUES
---(4, 3);
+INSERT INTO RecipeDish
+(RecipeID, DishID)
+VALUES
+(3, 3);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(1, 1);
+INSERT INTO RecipeDish
+(RecipeID, DishID)
+VALUES
+(4, 3);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(1, 6);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(1, 1);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(1, 8);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(1, 6);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(2, 6);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(1, 8);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(3, 7);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(2, 6);
 
---INSERT INTO RecipeStyle
---(RecipeID, StyleID)
---VALUES
---(4, 2);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(3, 7);
 
---INSERT INTO RecipeCategory
---(RecipeID, CategoryID)
---VALUES
---(1, 2);
+INSERT INTO RecipeStyle
+(RecipeID, StyleID)
+VALUES
+(4, 2);
 
---INSERT INTO RecipeCategory
---(RecipeID, CategoryID)
---VALUES
---(2, 8);
+INSERT INTO RecipeCategory
+(RecipeID, CategoryID)
+VALUES
+(1, 2);
 
---INSERT INTO RecipeCategory
---(RecipeID, CategoryID)
---VALUES
---(3, 7);
+INSERT INTO RecipeCategory
+(RecipeID, CategoryID)
+VALUES
+(2, 8);
 
---INSERT INTO RecipeCategory
---(RecipeID, CategoryID)
---VALUES
---(4, 1);
+INSERT INTO RecipeCategory
+(RecipeID, CategoryID)
+VALUES
+(3, 7);
+
+INSERT INTO RecipeCategory
+(RecipeID, CategoryID)
+VALUES
+(4, 1);
 
 --SELECT FROM TABLES
+SELECT * FROM dbo.RecipeUser
 SELECT * FROM dbo.Recipe
+SELECT * FROM dbo.Comment
+SELECT * FROM dbo.Review
 SELECT * FROM dbo.Ingredient
 SELECT * FROM dbo.Style
 SELECT * FROM dbo.Category
