@@ -38,11 +38,7 @@ namespace RecipeHelper.SqlRepository
 
                 while (reader.Read())
                 {
-                    Dish dish = new Dish();
-                    dish.ID = reader.GetInt32("DishID");
-                    dish.Name = reader.GetString("Name");
-                    dish.Description = reader.GetString("Description");
-
+                    Dish dish = this.BuildDishObjectFromReader(reader);
                     dishes.Add(dish);
                 }
 
@@ -67,11 +63,7 @@ namespace RecipeHelper.SqlRepository
 
                 while(reader.Read())
                 {
-                    Dish dish = new Dish();
-                    dish.ID = reader.GetInt32("DishID");
-                    dish.Name = reader.GetString("Name");
-                    dish.Description = reader.GetString("Description");
-
+                    Dish dish = this.BuildDishObjectFromReader(reader);
                     dishes.Add(dish);
                 }
 
@@ -97,10 +89,7 @@ namespace RecipeHelper.SqlRepository
 
                 if (reader.Read())
                 {
-                    dish = new Dish();
-                    dish.ID = reader.GetInt32("DishID");
-                    dish.Name = reader.GetString("Name");
-                    dish.Description = reader.GetString("Description");
+                    dish = this.BuildDishObjectFromReader(reader);
                 }
 
                 reader.Close();
@@ -158,6 +147,20 @@ namespace RecipeHelper.SqlRepository
             {
                 throw;
             }
+        }
+
+        private Dish BuildDishObjectFromReader(IDataReader reader)
+        {
+            Dish dish = new Dish();
+            dish.ID = reader.GetInt32("DishID");
+            dish.Name = reader.GetString("Name");
+            dish.Description = reader.GetString("Description");
+            dish.CreatedBy = reader.GetInt32("CreatedBy");
+            dish.CreatedDate = reader.GetDateTime("CreatedDate");
+            dish.ModifiedBy = reader.GetInt32("ModifiedBy");
+            dish.ModifiedDate = reader.GetDateTime("ModifiedDate");
+
+            return dish;
         }
     }
 }

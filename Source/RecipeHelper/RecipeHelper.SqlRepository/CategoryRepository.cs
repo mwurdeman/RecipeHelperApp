@@ -38,11 +38,7 @@ namespace RecipeHelper.SqlRepository
 
                 while(reader.Read())
                 {
-                    Category category = new Category();
-                    category.ID = reader.GetInt32("CategoryID");
-                    category.Name = reader.GetString("Name");
-                    category.Description = reader.GetString("Description");
-
+                    Category category = this.BuildCategoryObjectFromReader(reader);
                     categories.Add(category);
                 }
 
@@ -67,11 +63,7 @@ namespace RecipeHelper.SqlRepository
 
                 while(reader.Read())
                 {
-                    Category category = new Category();
-                    category.ID = reader.GetInt32("CategoryID");
-                    category.Name = reader.GetString("Name");
-                    category.Description = reader.GetString("Description");
-
+                    Category category = this.BuildCategoryObjectFromReader(reader);
                     categories.Add(category);
                 }
 
@@ -98,9 +90,7 @@ namespace RecipeHelper.SqlRepository
 
                 if(reader.Read())
                 {
-                    category.ID = reader.GetInt32("CategoryID");
-                    category.Name = reader.GetString("Name");
-                    category.Description = reader.GetString("Description");
+                    category = this.BuildCategoryObjectFromReader(reader);
                 }
 
                 reader.Close();
@@ -158,6 +148,20 @@ namespace RecipeHelper.SqlRepository
             {
                 throw;
             }
+        }
+
+        private Category BuildCategoryObjectFromReader(IDataReader reader)
+        {
+            Category category = new Category();
+            category.ID = reader.GetInt32("CategoryID");
+            category.Name = reader.GetString("Name");
+            category.Description = reader.GetString("Description");
+            category.CreatedBy = reader.GetInt32("CreatedBy");
+            category.CreatedDate = reader.GetDateTime("CreatedDate");
+            category.ModifiedBy = reader.GetInt32("ModifiedBy");
+            category.ModifiedDate = reader.GetDateTime("ModifiedDate");
+
+            return category;
         }
     }
 }

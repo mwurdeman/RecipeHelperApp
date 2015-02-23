@@ -20,6 +20,9 @@ namespace RecipeHelper.SqlRepository
         private readonly string USP_RECIPE_GETBYDISHID = "usp_Recipe_GetByDishID";
         private readonly string USP_RECIPE_GETBYSTYLEID = "usp_Recipe_GetByStyleID";
         private readonly string USP_RECIPE_GETBYCATEGORYID = "usp_Recipe_GetByCategoryID";
+        private readonly string USP_RECIPE_ADD = "";
+        private readonly string USP_RECIPE_UPDATE = "";
+        private readonly string USP_RECIPE_DELETE = "";
         
         public RecipeRepository(string connectionString)
         {
@@ -97,6 +100,10 @@ namespace RecipeHelper.SqlRepository
                         dish.ID = reader.GetInt32("DishID");
                         dish.Name = reader.GetString("DishName");
                         dish.Description = reader.GetString("DishDescription");
+                        dish.CreatedBy = reader.GetInt32("DishCreatedBy");
+                        dish.CreatedDate = reader.GetDateTime("DishCreatedDate");
+                        dish.ModifiedBy = reader.GetInt32("DishModifiedBy");
+                        dish.ModifiedDate = reader.GetDateTime("DishModifiedDate");
 
                         recipeDish.Dish = dish;
                     }
@@ -136,6 +143,10 @@ namespace RecipeHelper.SqlRepository
                         recipeStyle.Style.ID = reader.GetInt32("StyleID");
                         recipeStyle.Style.Name = reader.GetString("StyleName");
                         recipeStyle.Style.Description = reader.GetString("StyleDescription");
+                        recipeStyle.Style.CreatedBy = reader.GetInt32("StyleCreatedBy");
+                        recipeStyle.Style.CreatedDate = reader.GetDateTime("StyleCreatedDate");
+                        recipeStyle.Style.ModifiedBy = reader.GetInt32("StyleModifiedBy");
+                        recipeStyle.Style.ModifiedDate = reader.GetDateTime("StyleModifiedDate");
                     }
 
                     recipes.Add(BuildRecipeObjectFromReader(reader));
@@ -173,6 +184,10 @@ namespace RecipeHelper.SqlRepository
                         recipeCategory.Category.ID = reader.GetInt32("CategoryID");
                         recipeCategory.Category.Name = reader.GetString("CategoryName");
                         recipeCategory.Category.Description = reader.GetString("CategoryDescription");
+                        recipeCategory.Category.CreatedBy = reader.GetInt32("CategoryCreatedBy");
+                        recipeCategory.Category.CreatedDate = reader.GetDateTime("CategoryCreatedDate");
+                        recipeCategory.Category.ModifiedBy = reader.GetInt32("CategoryModifiedBy");
+                        recipeCategory.Category.ModifiedDate = reader.GetDateTime("CategoryModifiedDate");
                     }
 
                     recipes.Add(BuildRecipeObjectFromReader(reader));
@@ -207,7 +222,6 @@ namespace RecipeHelper.SqlRepository
         private Recipe BuildRecipeObjectFromReader(IDataReader reader)
         {
             Recipe recipe = new Recipe();
-
             recipe.ID = reader.GetInt32("RecipeID");
             recipe.Name = reader.GetString("Name");
             recipe.Description = reader.GetString("Description");

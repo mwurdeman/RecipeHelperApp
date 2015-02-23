@@ -38,11 +38,7 @@ namespace RecipeHelper.SqlRepository
 
                 while(reader.Read())
                 {
-                    Style style = new Style();
-                    style.ID = reader.GetInt32("StyleID");
-                    style.Name = reader.GetString("Name");
-                    style.Description = reader.GetString("Description");
-
+                    Style style = this.BuildStyleObjectFromReader(reader);
                     styles.Add(style);
                 }
 
@@ -68,11 +64,7 @@ namespace RecipeHelper.SqlRepository
 
                 while(reader.Read())
                 {
-                    Style style = new Style();
-                    style.ID = reader.GetInt32("StyleID");
-                    style.Name = reader.GetString("Name");
-                    style.Description = reader.GetString("Description");
-
+                    Style style = this.BuildStyleObjectFromReader(reader);
                     styles.Add(style);
                 }
 
@@ -98,9 +90,7 @@ namespace RecipeHelper.SqlRepository
 
                 if(reader.Read())
                 {
-                    style.ID = reader.GetInt32("StyleID");
-                    style.Name = reader.GetString("Name");
-                    style.Description = reader.GetString("Description");
+                    style = this.BuildStyleObjectFromReader(reader);
                 }
 
                 reader.Close();
@@ -158,6 +148,20 @@ namespace RecipeHelper.SqlRepository
             {
                 throw;
             }
+        }
+
+        private Style BuildStyleObjectFromReader(IDataReader reader)
+        {
+            Style style = new Style();
+            style.ID = reader.GetInt32("StyleID");
+            style.Name = reader.GetString("Name");
+            style.Description = reader.GetString("Description");
+            style.CreatedBy = reader.GetInt32("CreatedBy");
+            style.CreatedDate = reader.GetDateTime("CreatedDate");
+            style.ModifiedBy = reader.GetInt32("ModifiedBy");
+            style.ModifiedDate = reader.GetDateTime("ModifiedDate");
+            
+            return new Style();
         }
     }
 }
