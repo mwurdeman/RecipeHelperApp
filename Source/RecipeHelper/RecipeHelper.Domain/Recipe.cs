@@ -19,5 +19,9 @@ namespace RecipeHelper.Domain
         public int CreatedBy { get; set; }
         public DateTime ModifiedDate { get; set; }
         public int ModifiedBy { get; set; }
+
+        public IEnumerable<Style> RecipeStyles { get; set; }
+        public IEnumerable<Dish> RecipeDishes { get; set; }
+        public IEnumerable<Category> RecipeCategories { get; set; }
     }
 }

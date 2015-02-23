@@ -47,12 +47,15 @@
     <Compile Include="RecipeCategory.cs" />
     <Compile Include="RecipeDish.cs" />
     <Compile Include="RecipeStyle.cs" />
+    <Compile Include="RecipeUserService.cs" />
     <Compile Include="Repositories\ICategoryRepository.cs" />
     <Compile Include="Repositories\IDishRepository.cs" />
     <Compile Include="Repositories\IRecipeGroupsRepository.cs" />
     <Compile Include="Repositories\IRecipeRepository.cs" />
+    <Compile Include="Repositories\IRecipeUserRepository.cs" />
     <Compile Include="Repositories\IStyleRepository.cs" />
     <Compile Include="Style.cs" />
+    <Compile Include="RecipeUser.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

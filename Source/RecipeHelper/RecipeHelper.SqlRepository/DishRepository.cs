@@ -17,6 +17,7 @@ namespace RecipeHelper.SqlRepository
         private Database _database;
         private readonly string USP_DISH_GETALL = "usp_Dish_GetAll";
         private readonly string USP_DISH_GETBYID = "usp_Dish_GetByID";
+        private readonly string USP_DISH_GETBYRECIPEID = "usp_Dish_GetByRecipeID";
         private readonly string USP_DISH_ADD = "usp_Dish_Add";
         private readonly string USP_DISH_UPDATE = "usp_Dish_Update";
         private readonly string USP_DISH_DELETE = "usp_Dish_Delete";
@@ -36,6 +37,35 @@ namespace RecipeHelper.SqlRepository
                 IDataReader reader = _database.ExecuteReader(cmd);
 
                 while (reader.Read())
+                {
+                    Dish dish = new Dish();
+                    dish.ID = reader.GetInt32("DishID");
+                    dish.Name = reader.GetString("Name");
+                    dish.Description = reader.GetString("Description");
+
+                    dishes.Add(dish);
+                }
+
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
+
+            return dishes;
+        }
+
+        public IEnumerable<Dish> GetDishesByRecipeID(int recipeID)
+        {
+            List<Dish> dishes = new List<Dish>();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_DISH_GETBYRECIPEID);
+
+            try
+            {
+                IDataReader reader = this._database.ExecuteReader(cmd);
+
+                while(reader.Read())
                 {
                     Dish dish = new Dish();
                     dish.ID = reader.GetInt32("DishID");

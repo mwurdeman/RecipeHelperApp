@@ -17,6 +17,7 @@ namespace RecipeHelper.SqlRepository
         private Database _database;
         private readonly string USP_CATEGORY_ALL = "usp_Category_GetAll";
         private readonly string USP_CATEGORY_GETBYID = "usp_Category_GetByID";
+        private readonly string USP_CATEGORY_GETBYRECIPEID = "usp_Category_GetByRecipeID";
         private readonly string USP_CATEGORY_ADD = "usp_Category_Add";
         private readonly string USP_CATEGORY_UPDATE = "usp_Category_Update";
         private readonly string USP_CATEGORY_DELETE = "usp_Category_Delete";
@@ -51,6 +52,36 @@ namespace RecipeHelper.SqlRepository
             {
                 throw;
             }
+
+            return categories;
+        }
+
+        public IEnumerable<Category> GetCategoriesByRecipeID(int recipeID)
+        {
+            List<Category> categories = new List<Category>();
+            DbCommand cmd = this._database.GetStoredProcCommand(USP_CATEGORY_GETBYRECIPEID);
+
+            try
+            {
+                IDataReader reader = this._database.ExecuteReader(cmd);
+
+                while(reader.Read())
+                {
+                    Category category = new Category();
+                    category.ID = reader.GetInt32("CategoryID");
+                    category.Name = reader.GetString("Name");
+                    category.Description = reader.GetString("Description");
+
+                    categories.Add(category);
+                }
+
+                reader.Close();
+            }
+            catch
+            {
+                throw;
+            }
+
 
             return categories;
         }
