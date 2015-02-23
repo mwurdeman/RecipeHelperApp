@@ -37,7 +37,11 @@ BEGIN
 		R.ModifiedBy,
 		S.StyleID,
 		S.Name as 'StyleName',
-		S.Description as 'StyleDescription'
+		S.Description as 'StyleDescription',
+		S.CreatedDate as 'StyleCreatedDate',
+		S.CreatedBy as 'StyleCreatedBy',
+		S.ModifiedDate as 'StyleModifiedDate',
+		S.ModifiedBy as 'StyleModifiedBy'
 	FROM Recipe R
 		JOIN RecipeStyle RS ON R.RecipeID = RS.RecipeID
 		JOIN Style S ON RS.StyleID = S.StyleID

@@ -35,9 +35,13 @@ BEGIN
 		R.CreatedBy,
 		R.ModifiedDate,
 		R.ModifiedBy,
-		D.DishID as 'DishID',
+		D.DishID,
 		D.Name as 'DishName',
-		D.Description as 'DishDescription'
+		D.Description as 'DishDescription',
+		D.CreatedDate as 'DishCreatedDate',
+		D.CreatedBy as 'DishCreatedBy',
+		D.ModifiedDate as 'DishModifiedDate',
+		D.ModifiedBy as 'DishModifiedBy'
 	FROM Recipe R
 		JOIN RecipeDish RD ON R.RecipeID = RD.RecipeID
 		JOIN Dish D ON RD.DishID = D.DishID

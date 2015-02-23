@@ -985,7 +985,11 @@ BEGIN
 		R.ModifiedBy,
 		C.CategoryID,
 		C.Name as 'CategoryName',
-		C.Description as 'CategoryDescription'
+		C.Description as 'CategoryDescription',
+		C.CreatedDate as 'CategoryCreatedDate',
+		C.CreatedBy as 'CategoryCreatedBy',
+		C.ModifiedDate as 'CategoryModifiedDate',
+		C.ModifiedBy as 'CategoryModifiedBy'
 	FROM Recipe R
 		JOIN RecipeCategory RC ON R.RecipeID = RC.RecipeID
 		JOIN Category C ON RC.CategoryID = C.CategoryID
@@ -1029,7 +1033,11 @@ BEGIN
 		R.ModifiedBy,
 		D.DishID,
 		D.Name as 'DishName',
-		D.Description as 'DishDescription'
+		D.Description as 'DishDescription',
+		D.CreatedDate as 'DishCreatedDate',
+		D.CreatedBy as 'DishCreatedBy',
+		D.ModifiedDate as 'DishModifiedDate',
+		D.ModifiedBy as 'DishModifiedBy'
 	FROM Recipe R
 		JOIN RecipeDish RD ON R.RecipeID = RD.RecipeID
 		JOIN Dish D ON RD.DishID = D.DishID
@@ -1073,7 +1081,11 @@ BEGIN
 		R.ModifiedBy,
 		S.StyleID,
 		S.Name as 'StyleName',
-		S.Description as 'StyleDescription'
+		S.Description as 'StyleDescription',
+		S.CreatedDate as 'StyleCreatedDate',
+		S.CreatedBy as 'StyleCreatedBy',
+		S.ModifiedDate as 'StyleModifiedDate',
+		S.ModifiedBy as 'StyleModifiedBy'
 	FROM Recipe R
 		JOIN RecipeStyle RS ON R.RecipeID = RS.RecipeID
 		JOIN Style S ON RS.StyleID = S.StyleID
