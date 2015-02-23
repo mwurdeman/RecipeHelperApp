@@ -23,7 +23,11 @@ BEGIN
 
     Select DishID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Dish
 	WHERE DishID = @DishID;
 

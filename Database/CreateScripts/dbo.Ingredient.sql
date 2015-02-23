@@ -15,7 +15,10 @@ CREATE TABLE [dbo].[Ingredient](
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
 	[StockingUnit] [varchar](50) NOT NULL,
-	[StockingSize] [varchar](50) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Ingredient] PRIMARY KEY CLUSTERED 
 (
 	[IngredientID] ASC
@@ -24,7 +27,17 @@ CREATE TABLE [dbo].[Ingredient](
 
 GO
 
-SET ANSI_PADDING OFF
+ALTER TABLE [dbo].[Ingredient]  WITH CHECK ADD  CONSTRAINT [FK_Ingredient_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
 GO
 
+ALTER TABLE [dbo].[Ingredient] CHECK CONSTRAINT [FK_Ingredient_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Ingredient]  WITH CHECK ADD  CONSTRAINT [FK_Ingredient_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Ingredient] CHECK CONSTRAINT [FK_Ingredient_ModifiedBy]
+GO
 

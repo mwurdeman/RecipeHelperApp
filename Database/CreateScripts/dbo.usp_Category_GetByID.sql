@@ -23,7 +23,11 @@ BEGIN
 
     Select CategoryID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Category
 	WHERE CategoryID = @CategoryID;
 

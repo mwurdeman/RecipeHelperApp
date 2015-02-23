@@ -14,6 +14,10 @@ CREATE TABLE [dbo].[Dish](
 	[DishID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Dish] PRIMARY KEY CLUSTERED 
 (
 	[DishID] ASC
@@ -22,7 +26,18 @@ CREATE TABLE [dbo].[Dish](
 
 GO
 
-SET ANSI_PADDING OFF
+ALTER TABLE [dbo].[Dish]  WITH CHECK ADD  CONSTRAINT [FK_Dish_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Dish] CHECK CONSTRAINT [FK_Dish_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Dish]  WITH CHECK ADD  CONSTRAINT [FK_Dish_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Dish] CHECK CONSTRAINT [FK_Dish_ModifiedBy]
 GO
 
 

@@ -135,7 +135,11 @@ CREATE TABLE [dbo].[Ingredient](
 	[IngredientID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
-	[StockingUnit] [varchar](50) NOT NULL
+	[StockingUnit] [varchar](50) NOT NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Ingredient] PRIMARY KEY CLUSTERED 
 (
 	[IngredientID] ASC
@@ -144,10 +148,28 @@ CREATE TABLE [dbo].[Ingredient](
 
 GO
 
+ALTER TABLE [dbo].[Ingredient]  WITH CHECK ADD  CONSTRAINT [FK_Ingredient_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Ingredient] CHECK CONSTRAINT [FK_Ingredient_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Ingredient]  WITH CHECK ADD  CONSTRAINT [FK_Ingredient_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Ingredient] CHECK CONSTRAINT [FK_Ingredient_ModifiedBy]
+GO
+
 CREATE TABLE [dbo].[Dish](
 	[DishID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Dish] PRIMARY KEY CLUSTERED 
 (
 	[DishID] ASC
@@ -156,10 +178,28 @@ CREATE TABLE [dbo].[Dish](
 
 GO
 
+ALTER TABLE [dbo].[Dish]  WITH CHECK ADD  CONSTRAINT [FK_Dish_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Dish] CHECK CONSTRAINT [FK_Dish_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Dish]  WITH CHECK ADD  CONSTRAINT [FK_Dish_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Dish] CHECK CONSTRAINT [FK_Dish_ModifiedBy]
+GO
+
 CREATE TABLE [dbo].[Category](
 	[CategoryID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](150) NOT NULL,
 	[Description] [varchar](250) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Category] PRIMARY KEY CLUSTERED 
 (
 	[CategoryID] ASC
@@ -168,16 +208,48 @@ CREATE TABLE [dbo].[Category](
 
 GO
 
+ALTER TABLE [dbo].[Category]  WITH CHECK ADD  CONSTRAINT [FK_Category_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Category] CHECK CONSTRAINT [FK_Category_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Category]  WITH CHECK ADD  CONSTRAINT [FK_Category_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Category] CHECK CONSTRAINT [FK_Category_ModifiedBy]
+GO
+
 CREATE TABLE [dbo].[Style](
 	[StyleID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](100) NOT NULL,
 	[Description] [varchar](250) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Style] PRIMARY KEY CLUSTERED 
 (
 	[StyleID] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 ) ON [PRIMARY]
 
+GO
+
+ALTER TABLE [dbo].[Style]  WITH CHECK ADD  CONSTRAINT [FK_Style_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Style] CHECK CONSTRAINT [FK_Style_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Style]  WITH CHECK ADD  CONSTRAINT [FK_Style_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Style] CHECK CONSTRAINT [FK_Style_ModifiedBy]
 GO
 
 CREATE TABLE [dbo].[RecipeStep](
@@ -355,7 +427,11 @@ BEGIN
 
     Select CategoryID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Category;
 
 END
@@ -385,7 +461,11 @@ BEGIN
 
     Select CategoryID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Category
 	WHERE CategoryID = @CategoryID;
 
@@ -408,15 +488,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Category_Add]
 (
 	@Name VARCHAR(150),
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	INSERT INTO dbo.Category
-	(Name, Description)
+	(Name, Description, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
 	VALUES
-	(@Name, @Description);
+	(@Name, @Description, @RecipeUserID, CURRENT_TIMESTAMP, @RecipeUserID, CURRENT_TIMESTAMP);
 
 	SELECT CONVERT(int, SCOPE_IDENTITY());
 
@@ -439,13 +520,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Category_Update]
 (
 	@CategoryID INT,
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	UPDATE Category
 	SET Description = @Description
+		, ModifiedBy = @RecipeUserID
+		, ModifiedDate = CURRENT_TIMESTAMP
 	WHERE CategoryID = @CategoryID;
 
 END
@@ -501,7 +585,11 @@ BEGIN
 
     Select DishID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Dish
 	WHERE DishID = @DishID;
 
@@ -529,7 +617,11 @@ BEGIN
 
     Select DishID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Dish;
 
 END
@@ -551,15 +643,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Dish_Add]
 (
 	@Name VARCHAR(150),
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	INSERT INTO dbo.Dish
-	(Name, Description)
+	(Name, Description, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
 	VALUES
-	(@Name, @Description);
+	(@Name, @Description, @RecipeUserID, CURRENT_TIMESTAMP, @RecipeUserID, CURRENT_TIMESTAMP);
 
 	SELECT CONVERT(int, SCOPE_IDENTITY());
 
@@ -582,13 +675,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Dish_Update]
 (
 	@DishID INT,
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	UPDATE Dish
 	SET Description = @Description
+		, ModifiedBy = @RecipeUserID
+		, ModifiedDate = CURRENT_TIMESTAMP
 	WHERE DishID = @DishID;
 
 END
@@ -646,12 +742,17 @@ BEGIN
 	SELECT 
 		StyleID,
 		Name,
-		Description
+		Description,
+		CreatedBy, 
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Style
 	WHERE StyleID = @StyleID;
 
 END
 GO
+
 
 PRINT 'GRANT EXECUTE to procedure - dbo.usp_Style_GetByID'
 GRANT EXECUTE ON [dbo].[usp_Style_GetByID] TO RecipeHelperUser
@@ -676,7 +777,11 @@ BEGIN
 	SELECT 
 		StyleID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Style;
 
 END
@@ -698,15 +803,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Style_Add]
 (
 	@Name VARCHAR(150),
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	INSERT INTO dbo.Style
-	(Name, Description)
+	(Name, Description, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
 	VALUES
-	(@Name, @Description);
+	(@Name, @Description, @RecipeUserID, CURRENT_TIMESTAMP, @RecipeUserID, CURRENT_TIMESTAMP);
 
 	SELECT CONVERT(int, SCOPE_IDENTITY());
 
@@ -729,13 +835,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Style_Update]
 (
 	@StyleID INT,
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	UPDATE Style
 	SET Description = @Description
+		, ModifiedBy = @RecipeUserID
+		, ModifiedDate = CURRENT_TIMESTAMP
 	WHERE StyleID = @StyleID;
 
 END
@@ -979,160 +1088,161 @@ GO
 
 --INSERT INTO TABLES
 PRINT 'INSERTING SEED DATA'
-INSERT INTO Dish
-(Name)
-VALUES
-('Breakfast');
-
-INSERT INTO Dish
-(Name)
-VALUES
-('Lunch');
-
-INSERT INTO Dish
-(Name)
-VALUES
-('Dinner');
-
-INSERT INTO Dish
-(Name)
-VALUES
-('Snack');
-
-INSERT INTO Dish
-(Name)
-VALUES
-('Dessert');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Chicken');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Pork');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Steak');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Beef');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Pasta');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Soup');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Fish');
-
-INSERT INTO Category
-(Name)
-VALUES
-('Hamburger');
-
-INSERT INTO Style
-(Name)
-VALUES
-('BBQ');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Chinese');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Italian');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Mexican');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Stew');
-
-INSERT INTO Style
-(Name)
-VALUES
-('American');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Other');
-
-INSERT INTO Style
-(Name)
-VALUES
-('Crockpot');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Cream of Mushroom', '', '10 1/2 Oz Can');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Cream of Chicken', '', '10 1/2 Oz Can');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Yellow Onion', '', 'Each');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Red Onion', '', 'Each');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Red Pepper', '', 'Each');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Green Pepper', '', 'Each');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Hamburger', '', 'LBS');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Chicken', '', 'LBS');
-
-INSERT INTO Ingredient 
-(Name, Description, StockingUnit)
-VALUES
-('Pork Chops', '', 'LBS');
 
 INSERT INTO RecipeUser
 (FirstName, LastName, Active)
 VALUES
 ('Matthew', 'Wurdeman', 1);
+
+INSERT INTO Dish
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Breakfast', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Dish
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Lunch', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Dish
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Dinner', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Dish
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Snack', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Dish
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Dessert', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Chicken', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Pork', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Steak', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Beef', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Pasta', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Soup', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Fish', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Category
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Hamburger', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('BBQ', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Chinese', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Italian', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Mexican', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Stew', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('American', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Other', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Style
+(Name, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Crockpot', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Cream of Mushroom', '', '10 1/2 Oz Can', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Cream of Chicken', '', '10 1/2 Oz Can', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Yellow Onion', '', 'Each', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Red Onion', '', 'Each', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Red Pepper', '', 'Each', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Green Pepper', '', 'Each', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Hamburger', '', 'LBS', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Chicken', '', 'LBS', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
+
+INSERT INTO Ingredient 
+(Name, Description, StockingUnit, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
+VALUES
+('Pork Chops', '', 'LBS', 1, CURRENT_TIMESTAMP, 1, CURRENT_TIMESTAMP);
 
 INSERT INTO Recipe
 (Name, Description, Source, Servings, PrepTime, TotalRecipeTime, CreatedDate, CreatedBy, ModifiedDate, ModifiedBy)

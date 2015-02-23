@@ -35,7 +35,7 @@ BEGIN
 		R.CreatedBy,
 		R.ModifiedDate,
 		R.ModifiedBy,
-		D.DishID,
+		D.DishID as 'DishID',
 		D.Name as 'DishName',
 		D.Description as 'DishDescription'
 	FROM Recipe R

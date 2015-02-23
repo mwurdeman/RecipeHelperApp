@@ -14,6 +14,10 @@ CREATE TABLE [dbo].[Style](
 	[StyleID] [int] IDENTITY(1,1) NOT NULL,
 	[Name] [varchar](100) NOT NULL,
 	[Description] [varchar](250) NULL,
+	[CreatedDate] [datetime] NOT NULL,
+	[CreatedBy] [int] NOT NULL,
+	[ModifiedDate] [datetime] NOT NULL,
+	[ModifiedBy] [int] NOT NULL
  CONSTRAINT [PK_Style] PRIMARY KEY CLUSTERED 
 (
 	[StyleID] ASC
@@ -22,7 +26,18 @@ CREATE TABLE [dbo].[Style](
 
 GO
 
-SET ANSI_PADDING OFF
+ALTER TABLE [dbo].[Style]  WITH CHECK ADD  CONSTRAINT [FK_Style_CreatedBy] FOREIGN KEY([CreatedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Style] CHECK CONSTRAINT [FK_Style_CreatedBy]
+GO
+
+ALTER TABLE [dbo].[Style]  WITH CHECK ADD  CONSTRAINT [FK_Style_ModifiedBy] FOREIGN KEY([ModifiedBy])
+REFERENCES [dbo].[RecipeUser] ([RecipeUserID])
+GO
+
+ALTER TABLE [dbo].[Style] CHECK CONSTRAINT [FK_Style_ModifiedBy]
 GO
 
 

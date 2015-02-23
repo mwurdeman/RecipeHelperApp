@@ -22,7 +22,11 @@ BEGIN
 	SELECT 
 		StyleID,
 		Name,
-		Description
+		Description,
+		CreatedBy,
+		CreatedDate,
+		ModifiedBy,
+		ModifiedDate
 	FROM dbo.Style;
 
 END

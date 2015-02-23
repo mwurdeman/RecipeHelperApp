@@ -18,15 +18,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Category_Add]
 (
 	@Name VARCHAR(150),
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	INSERT INTO dbo.Category
-	(Name, Description)
+	(Name, Description, CreatedBy, CreatedDate, ModifiedBy, ModifiedDate)
 	VALUES
-	(@Name, @Description);
+	(@Name, @Description, @RecipeUserID, CURRENT_TIMESTAMP, @RecipeUserID, CURRENT_TIMESTAMP);
 
 	SELECT CONVERT(int, SCOPE_IDENTITY());
 

@@ -9,6 +9,7 @@ SELECT * FROM dbo.RecipeStepIngredient
 SELECT * FROM dbo.RecipeCategory
 SELECT * FROM dbo.RecipeDish
 SELECT * FROM dbo.RecipeStyle
+SELECT * FROM dbo.RecipeUser
 
 SELECT 
 	R.RecipeID,
@@ -64,3 +65,9 @@ FROM Recipe R
 	JOIN Category C ON RC.CategoryID = C.CategoryID
 WHERE C.CategoryID = 2
 
+SELECT D.DishID
+	, D.Name
+	, D.Description
+FROM Dish D
+	JOIN RecipeDish RD ON D.DishID = RD.DishID
+WHERE RD.RecipeID = 2

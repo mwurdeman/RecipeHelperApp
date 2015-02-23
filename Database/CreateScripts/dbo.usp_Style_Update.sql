@@ -18,13 +18,16 @@ GO
 CREATE PROCEDURE [dbo].[usp_Style_Update]
 (
 	@StyleID INT,
-	@Description VARCHAR(250)
+	@Description VARCHAR(250),
+	@RecipeUserID INT
 )
 AS
 BEGIN
 
 	UPDATE Style
 	SET Description = @Description
+		, ModifiedBy = @RecipeUserID
+		, ModifiedDate = CURRENT_TIMESTAMP
 	WHERE StyleID = @StyleID;
 
 END
